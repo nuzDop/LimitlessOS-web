@@ -2,95 +2,145 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* LimitlessOS Design System - Elite Operating System Theme */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* OS Core Colors */
+    --os-void: 0 0% 0%;
+    --os-shadow: 0 0% 8%;
+    --os-dark: 0 0% 12%;
+    --os-medium: 0 0% 18%;
+    --os-light: 0 0% 85%;
+    --os-bright: 0 0% 95%;
+    --os-pure: 0 0% 100%;
+    
+    /* Infinity Theme */
+    --infinity-primary: 240 100% 50%;
+    --infinity-secondary: 280 100% 60%;
+    --infinity-glow: 260 100% 70%;
+    --infinity-pale: 250 50% 90%;
+    
+    /* System States */
+    --success: 120 60% 50%;
+    --warning: 45 100% 55%;
+    --error: 0 85% 60%;
+    --info: 200 100% 55%;
+    
+    /* Glass & Blur Effects */
+    --glass-bg: 0 0% 100% / 0.05;
+    --glass-border: 0 0% 100% / 0.1;
+    --blur-backdrop: blur(20px);
+    
+    /* Gradients */
+    --gradient-infinity: linear-gradient(135deg, hsl(var(--infinity-primary)), hsl(var(--infinity-secondary)));
+    --gradient-os: linear-gradient(180deg, hsl(var(--os-void)), hsl(var(--os-shadow)));
+    --gradient-glass: linear-gradient(145deg, hsl(var(--glass-bg)), transparent);
+    
+    /* Shadows */
+    --shadow-infinity: 0 0 40px hsl(var(--infinity-glow) / 0.3);
+    --shadow-window: 0 20px 60px hsl(var(--os-void) / 0.5);
+    --shadow-button: 0 4px 15px hsl(var(--os-void) / 0.2);
+    
+    /* Animations */
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    
+    /* Typography */
+    --font-os: 'Inter', 'SF Pro Display', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Legacy compatibility */
+    --background: var(--os-void);
+    --foreground: var(--os-pure);
+    --card: var(--os-dark);
+    --card-foreground: var(--os-bright);
+    --popover: var(--os-medium);
+    --popover-foreground: var(--os-pure);
+    --primary: var(--infinity-primary);
+    --primary-foreground: var(--os-pure);
+    --secondary: var(--os-medium);
+    --secondary-foreground: var(--os-bright);
+    --muted: var(--os-medium);
+    --muted-foreground: var(--os-light);
+    --accent: var(--infinity-secondary);
+    --accent-foreground: var(--os-pure);
+    --destructive: var(--error);
+    --destructive-foreground: var(--os-pure);
+    --border: var(--os-medium);
+    --input: var(--os-dark);
+    --ring: var(--infinity-glow);
+    --radius: 0.75rem;
+  }
+}
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html, body {
+    @apply h-full overflow-hidden;
+    font-family: var(--font-os);
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+  body {
+    @apply bg-os-void text-os-pure;
+    background: var(--gradient-os);
+  }
+  
+  /* OS-specific styles */
+  .os-window {
+    background: hsl(var(--glass-bg));
+    backdrop-filter: var(--blur-backdrop);
+    border: 1px solid hsl(var(--glass-border));
+    box-shadow: var(--shadow-window);
+  }
+  
+  .os-button {
+    transition: var(--transition-smooth);
+  }
+  
+  .os-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-button);
+  }
+  
+  .infinity-glow {
+    animation: infinityPulse 3s ease-in-out infinite;
+  }
+  
+  @keyframes infinityPulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+  }
+  
+  @keyframes infinityRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  @keyframes bootFade {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--os-dark));
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--os-medium));
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--infinity-primary));
   }
 }
 

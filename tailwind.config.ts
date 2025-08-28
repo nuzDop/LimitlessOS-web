@@ -19,6 +19,28 @@ export default {
 		},
 		extend: {
 			colors: {
+				// LimitlessOS Color System
+				'os-void': 'hsl(var(--os-void))',
+				'os-shadow': 'hsl(var(--os-shadow))',
+				'os-dark': 'hsl(var(--os-dark))',
+				'os-medium': 'hsl(var(--os-medium))',
+				'os-light': 'hsl(var(--os-light))',
+				'os-bright': 'hsl(var(--os-bright))',
+				'os-pure': 'hsl(var(--os-pure))',
+				
+				// Infinity Theme
+				'infinity-primary': 'hsl(var(--infinity-primary))',
+				'infinity-secondary': 'hsl(var(--infinity-secondary))',
+				'infinity-glow': 'hsl(var(--infinity-glow))',
+				'infinity-pale': 'hsl(var(--infinity-pale))',
+				
+				// System States
+				success: 'hsl(var(--success))',
+				warning: 'hsl(var(--warning))',
+				error: 'hsl(var(--error))',
+				info: 'hsl(var(--info))',
+				
+				// Legacy compatibility
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
@@ -51,16 +73,6 @@ export default {
 				card: {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
-				},
-				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
 				}
 			},
 			borderRadius: {
