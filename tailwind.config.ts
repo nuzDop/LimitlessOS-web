@@ -19,7 +19,7 @@ export default {
 		},
 		extend: {
 			colors: {
-				// LimitlessOS Color System
+				// SecureOS Color System
 				'os-void': 'hsl(var(--os-void))',
 				'os-shadow': 'hsl(var(--os-shadow))',
 				'os-dark': 'hsl(var(--os-dark))',
@@ -28,11 +28,11 @@ export default {
 				'os-bright': 'hsl(var(--os-bright))',
 				'os-pure': 'hsl(var(--os-pure))',
 				
-				// Infinity Theme
-				'infinity-primary': 'hsl(var(--infinity-primary))',
-				'infinity-secondary': 'hsl(var(--infinity-secondary))',
-				'infinity-glow': 'hsl(var(--infinity-glow))',
-				'infinity-pale': 'hsl(var(--infinity-pale))',
+				// Military/Business Theme
+				'military-primary': 'hsl(var(--military-primary))',
+				'military-secondary': 'hsl(var(--military-secondary))',
+				'military-accent': 'hsl(var(--military-accent))',
+				'military-critical': 'hsl(var(--military-critical))',
 				
 				// System States
 				success: 'hsl(var(--success))',

@@ -29,19 +29,19 @@ export interface App {
 const apps: App[] = [
   {
     id: 'terminal',
-    name: 'Terminal',
+    name: 'Command Terminal',
     icon: '⚡',
     component: Terminal
   },
   {
     id: 'navigator',
-    name: 'Navigator',
+    name: 'File Navigator',
     icon: '📁',
     component: FileExplorer
   },
   {
     id: 'settings',
-    name: 'Settings',
+    name: 'System Control',
     icon: '⚙️',
     component: Settings
   }
@@ -113,25 +113,40 @@ export const Desktop: React.FC = () => {
     <div className="h-screen bg-gradient-to-br from-os-void via-os-shadow to-os-dark relative overflow-hidden">
       {/* Desktop Background */}
       <div className="absolute inset-0">
-        {/* Infinity pattern background */}
+        {/* Military grid pattern background */}
         <div className="absolute inset-0 opacity-10">
-          {[...Array(5)].map((_, i) => (
+          {[...Array(8)].map((_, i) => (
             <div
               key={i}
-              className="absolute w-32 h-16 opacity-30"
+              className="absolute border border-military-primary/20"
               style={{
-                left: `${20 + i * 25}%`,
-                top: `${20 + (i % 2) * 30}%`,
+                left: `${10 + i * 12}%`,
+                top: `${10 + (i % 3) * 25}%`,
+                width: '120px',
+                height: '120px',
                 transform: `rotate(${i * 45}deg)`
               }}
+            />
+          ))}
+          
+          {/* Security badge pattern */}
+          {[...Array(3)].map((_, i) => (
+            <div
+              key={`badge-${i}`}
+              className="absolute w-16 h-16 opacity-20"
+              style={{
+                right: `${20 + i * 30}%`,
+                top: `${30 + i * 20}%`,
+                transform: `rotate(${i * 30}deg)`
+              }}
             >
-              <svg viewBox="0 0 200 100" className="w-full h-full">
+              <svg viewBox="0 0 100 100" className="w-full h-full">
                 <path
-                  d="M50 50C50 22 72 0 100 0s50 22 50 50-22 50-50 50-22-22 0-50 22-50 50-50 50 22 50 50-22 50-50 50-50-22-50-50z"
+                  d="M50 10 L80 30 L80 70 C80 85 65 90 50 90 C35 90 20 85 20 70 L20 30 Z"
                   fill="none"
-                  stroke="hsl(var(--infinity-primary))"
+                  stroke="hsl(var(--military-secondary))"
                   strokeWidth="1"
-                  opacity="0.3"
+                  opacity="0.4"
                 />
               </svg>
             </div>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BootSplash } from './BootSplash';
 import { Desktop } from './Desktop';
 
-export const LimitlessOS: React.FC = () => {
+export const SecureOS: React.FC = () => {
   const [isBooted, setIsBooted] = useState(false);
 
   const handleBootComplete = () => {

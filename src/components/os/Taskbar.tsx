@@ -15,17 +15,15 @@ export const Taskbar: React.FC<TaskbarProps> = ({
   return (
     <div className="fixed bottom-0 left-0 right-0 h-12 os-window border-t border-os-medium z-50">
       <div className="flex items-center h-full px-4">
-        {/* Infinity Logo / App Launcher */}
+        {/* Security Shield / App Launcher */}
         <button
           onClick={onLauncherToggle}
-          className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-r from-infinity-primary to-infinity-secondary os-button hover:shadow-[0_0_20px_hsl(var(--infinity-glow)/0.5)] transition-all duration-300"
+          className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-r from-military-primary to-military-secondary os-button hover:shadow-[0_0_20px_hsl(var(--military-accent)/0.5)] transition-all duration-300"
         >
-          <svg viewBox="0 0 200 100" className="w-5 h-3">
+          <svg viewBox="0 0 100 100" className="w-5 h-5">
             <path
-              d="M50 50C50 22 72 0 100 0s50 22 50 50-22 50-50 50-22-22 0-50 22-50 50-50 50 22 50 50-22 50-50 50-50-22-50-50z"
-              fill="none"
-              stroke="white"
-              strokeWidth="8"
+              d="M50 10 L80 30 L80 70 C80 85 65 90 50 90 C35 90 20 85 20 70 L20 30 Z"
+              fill="white"
               strokeLinecap="round"
             />
           </svg>
@@ -48,8 +46,8 @@ export const Taskbar: React.FC<TaskbarProps> = ({
         <div className="ml-auto flex items-center space-x-4">
           {/* System Status */}
           <div className="flex items-center space-x-2 text-xs text-os-light">
-            <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
-            <span>Online</span>
+            <div className="w-2 h-2 rounded-full bg-military-secondary animate-pulse" />
+            <span>Secure</span>
           </div>
           
           {/* Clock */}
