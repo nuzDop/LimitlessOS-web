@@ -2,75 +2,68 @@
 @tailwind components;
 @tailwind utilities;
 
-/* LimitlessOS Design System - Infinity-Themed Operating System */
+/* LimitlessOS Design System - Minimalist Professional Theme */
 
 @layer base {
   :root {
-    /* OS Core Colors - Infinity Theme */
-    --os-void: 0 0% 0%;             /* Pure black */
-    --os-shadow: 0 0% 15%;          /* Dark gray */
-    --os-dark: 0 0% 25%;            /* Medium gray */
-    --os-medium: 0 0% 45%;          /* Light gray */
-    --os-light: 0 0% 75%;           /* Very light gray */
-    --os-bright: 0 0% 95%;          /* Near white */
+    /* OS Core Colors - Refined Dark Theme */
+    --os-void: 220 18% 8%;          /* Deep space black */
+    --os-shadow: 220 16% 12%;       /* Near black */
+    --os-dark: 220 14% 16%;         /* Dark charcoal */
+    --os-medium: 220 10% 25%;       /* Interface gray */
+    --os-light: 220 8% 60%;         /* Data gray */
+    --os-bright: 220 10% 92%;       /* Terminal white */
     --os-pure: 0 0% 100%;           /* Pure white */
     
-    /* Infinity Theme Colors */
-    --infinity-primary: 270 100% 65%;       /* Purple infinity */
-    --infinity-secondary: 210 100% 55%;     /* Blue infinity */
-    --infinity-accent: 300 100% 70%;        /* Magenta accent */
-    --infinity-glow: 240 100% 80%;          /* Light purple glow */
+    /* Professional Theme */
+    --professional-primary: 210 100% 55%;   /* Professional blue */
+    --professional-secondary: 190 80% 50%;  /* Cool cyan */
+    --professional-accent: 260 95% 65%;     /* Subtle violet */
+    --professional-critical: 0 75% 55%;     /* Critical red */
     
     /* System States */
-    --success: 120 60% 50%;
-    --warning: 45 100% 55%;
+    --success: 140 60% 50%;
+    --warning: 35 100% 55%;
     --error: 0 85% 60%;
     --info: 200 100% 55%;
     
     /* Glass & Blur Effects */
-    --glass-bg: 0 0% 100% / 0.05;
+    --glass-bg: 220 18% 8% / 0.5;
     --glass-border: 0 0% 100% / 0.1;
-    --blur-backdrop: blur(20px);
-    
-    /* Gradients */
-    --gradient-infinity: linear-gradient(135deg, hsl(var(--infinity-primary)), hsl(var(--infinity-secondary)));
-    --gradient-background: linear-gradient(180deg, hsl(var(--os-void)), hsl(var(--os-shadow)), hsl(var(--os-dark)));
-    --gradient-glass: linear-gradient(145deg, hsl(var(--glass-bg)), transparent);
+    --blur-backdrop: blur(16px);
     
     /* Shadows */
-    --shadow-infinity: 0 0 30px hsl(var(--infinity-glow) / 0.4);
-    --shadow-window: 0 20px 60px hsl(var(--os-void) / 0.8);
+    --shadow-window: 0 20px 60px hsl(var(--os-void) / 0.6);
     --shadow-button: 0 4px 15px hsl(var(--os-void) / 0.4);
     
     /* Animations */
-    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     
     /* Typography */
     --font-os: 'Inter', 'SF Pro Display', system-ui, sans-serif;
     --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
 
-    /* Legacy compatibility */
+    /* Legacy compatibility for shadcn/ui */
     --background: var(--os-void);
-    --foreground: var(--os-pure);
+    --foreground: var(--os-bright);
     --card: var(--os-dark);
     --card-foreground: var(--os-bright);
     --popover: var(--os-medium);
-    --popover-foreground: var(--os-pure);
-    --primary: var(--infinity-primary);
+    --popover-foreground: var(--os-bright);
+    --primary: var(--professional-primary);
     --primary-foreground: var(--os-pure);
     --secondary: var(--os-medium);
     --secondary-foreground: var(--os-bright);
     --muted: var(--os-medium);
     --muted-foreground: var(--os-light);
-    --accent: var(--infinity-secondary);
+    --accent: var(--professional-accent);
     --accent-foreground: var(--os-pure);
     --destructive: var(--error);
     --destructive-foreground: var(--os-pure);
     --border: var(--os-medium);
     --input: var(--os-dark);
-    --ring: var(--infinity-primary);
-    --radius: 0.75rem;
+    --ring: var(--professional-primary);
+    --radius: 0.5rem;
   }
 }
 
@@ -86,13 +79,12 @@
 
   body {
     @apply bg-os-void text-os-pure;
-    background: var(--gradient-background);
   }
   
-  /* OS-specific styles */
   .os-window {
-    background: hsl(var(--glass-bg));
+    background: hsla(var(--glass-bg));
     backdrop-filter: var(--blur-backdrop);
+    -webkit-backdrop-filter: var(--blur-backdrop);
     border: 1px solid hsl(var(--glass-border));
     box-shadow: var(--shadow-window);
   }
@@ -106,50 +98,27 @@
     box-shadow: var(--shadow-button);
   }
   
-  .infinity-glow {
-    animation: infinityPulse 3s ease-in-out infinite;
-  }
-  
-  @keyframes infinityPulse {
-    0%, 100% { opacity: 0.7; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.02); }
-  }
-  
-  @keyframes infinityRotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-  
   @keyframes bootFade {
-    0% { opacity: 0; transform: scale(0.8); }
+    0% { opacity: 0; transform: scale(0.9); }
     100% { opacity: 1; transform: scale(1); }
   }
   
   /* Scrollbar styling */
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
+    height: 6px;
   }
   
   ::-webkit-scrollbar-track {
-    background: hsl(var(--os-dark));
+    background: hsl(var(--os-dark) / 0.5);
   }
   
   ::-webkit-scrollbar-thumb {
     background: hsl(var(--os-medium));
-    border-radius: 4px;
+    border-radius: 3px;
   }
   
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--infinity-primary));
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-foreground;
+    background: hsl(var(--professional-primary));
   }
 }

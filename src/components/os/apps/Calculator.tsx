@@ -1,160 +1,86 @@
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
 
 export const Calculator: React.FC = () => {
-  const [display, setDisplay] = useState('0');
-  const [previousValue, setPreviousValue] = useState<number | null>(null);
-  const [operation, setOperation] = useState<string | null>(null);
-  const [waitingForNewValue, setWaitingForNewValue] = useState(false);
+  const [display, setDisplay] = useState("0");
+  const [currentValue, setCurrentValue] = useState<number | null>(null);
+  const [operator, setOperator] = useState<string | null>(null);
+  const [waitingForOperand, setWaitingForOperand] = useState(true);
 
-  const inputNumber = (num: string) => {
-    if (waitingForNewValue) {
-      setDisplay(num);
-      setWaitingForNewValue(false);
+  const handleDigitClick = (digit: string) => {
+    if (waitingForOperand) {
+      setDisplay(digit);
+      setWaitingForOperand(false);
     } else {
-      setDisplay(display === '0' ? num : display + num);
+      setDisplay(display === "0" ? digit : display + digit);
     }
   };
 
-  const inputOperation = (nextOperation: string) => {
+  const handleOperatorClick = (op: string) => {
     const inputValue = parseFloat(display);
-
-    if (previousValue === null) {
-      setPreviousValue(inputValue);
-    } else if (operation) {
-      const currentValue = previousValue || 0;
-      const newValue = calculate(currentValue, inputValue, operation);
-
-      setDisplay(String(newValue));
-      setPreviousValue(newValue);
+    if (currentValue === null) {
+      setCurrentValue(inputValue);
+    } else if (operator) {
+      const result = calculate();
+      setCurrentValue(result);
+      setDisplay(String(result));
     }
-
-    setWaitingForNewValue(true);
-    setOperation(nextOperation);
+    setWaitingForOperand(true);
+    setOperator(op);
   };
 
-  const calculate = (firstValue: number, secondValue: number, operation: string) => {
-    switch (operation) {
-      case '+':
-        return firstValue + secondValue;
-      case '-':
-        return firstValue - secondValue;
-      case '×':
-        return firstValue * secondValue;
-      case '÷':
-        return firstValue / secondValue;
-      case '=':
-        return secondValue;
-      default:
-        return secondValue;
-    }
-  };
-
-  const performCalculation = () => {
+  const calculate = () => {
     const inputValue = parseFloat(display);
-
-    if (previousValue !== null && operation) {
-      const newValue = calculate(previousValue, inputValue, operation);
-      setDisplay(String(newValue));
-      setPreviousValue(null);
-      setOperation(null);
-      setWaitingForNewValue(true);
+    if (currentValue === null || operator === null) return inputValue;
+    switch (operator) {
+      case '+': return currentValue + inputValue;
+      case '-': return currentValue - inputValue;
+      case '*': return currentValue * inputValue;
+      case '/': return currentValue / inputValue;
+      default: return inputValue;
     }
   };
 
-  const clearAll = () => {
-    setDisplay('0');
-    setPreviousValue(null);
-    setOperation(null);
-    setWaitingForNewValue(false);
+  const handleEquals = () => {
+    const result = calculate();
+    setCurrentValue(result);
+    setDisplay(String(result));
+    setOperator(null);
+    setWaitingForOperand(true);
   };
 
-  const clearEntry = () => {
-    setDisplay('0');
+  const handleClear = () => {
+    setDisplay("0");
+    setCurrentValue(null);
+    setOperator(null);
+    setWaitingForOperand(true);
   };
 
-  const inputDecimal = () => {
-    if (waitingForNewValue) {
-      setDisplay('0.');
-      setWaitingForNewValue(false);
-    } else if (display.indexOf('.') === -1) {
-      setDisplay(display + '.');
-    }
+  const buttons = [
+    'C', '±', '%', '/',
+    '7', '8', '9', '*',
+    '4', '5', '6', '-',
+    '1', '2', '3', '+',
+    '0', '.', '='
+  ];
+
+  const handleButtonClick = (btn: string) => {
+    if (!isNaN(parseInt(btn))) handleDigitClick(btn);
+    else if (btn === '.') setDisplay(display.includes('.') ? display : display + '.');
+    else if (['/', '*', '-', '+'].includes(btn)) handleOperatorClick(btn);
+    else if (btn === '=') handleEquals();
+    else if (btn === 'C') handleClear();
   };
 
   return (
-    <div className="h-full bg-os-dark text-os-bright p-4 max-w-sm mx-auto">
-      <div className="mb-4">
-        <div className="bg-os-void p-4 rounded-lg text-right text-2xl font-mono min-h-16 flex items-center justify-end border border-os-medium">
-          {display}
+    <div className="h-full bg-os-dark text-os-bright flex flex-col p-2">
+        <div className="bg-os-shadow text-right text-4xl p-4 rounded-md mb-2">{display}</div>
+        <div className="grid grid-cols-4 gap-2 flex-1">
+            {buttons.map(btn => (
+                <button key={btn} onClick={() => handleButtonClick(btn)} className="bg-os-medium hover:bg-os-light/20 rounded-md text-xl font-bold transition-colors">
+                    {btn}
+                </button>
+            ))}
         </div>
-      </div>
-
-      <div className="grid grid-cols-4 gap-3">
-        {/* Row 1 */}
-        <Button variant="outline" onClick={clearAll} className="bg-os-medium hover:bg-os-light">
-          AC
-        </Button>
-        <Button variant="outline" onClick={clearEntry} className="bg-os-medium hover:bg-os-light">
-          CE
-        </Button>
-        <Button variant="outline" onClick={() => inputOperation('÷')} className="bg-infinity-primary hover:bg-infinity-secondary text-white">
-          ÷
-        </Button>
-        <Button variant="outline" onClick={() => inputOperation('×')} className="bg-infinity-primary hover:bg-infinity-secondary text-white">
-          ×
-        </Button>
-
-        {/* Row 2 */}
-        <Button variant="outline" onClick={() => inputNumber('7')} className="bg-os-shadow hover:bg-os-medium">
-          7
-        </Button>
-        <Button variant="outline" onClick={() => inputNumber('8')} className="bg-os-shadow hover:bg-os-medium">
-          8
-        </Button>
-        <Button variant="outline" onClick={() => inputNumber('9')} className="bg-os-shadow hover:bg-os-medium">
-          9
-        </Button>
-        <Button variant="outline" onClick={() => inputOperation('-')} className="bg-infinity-primary hover:bg-infinity-secondary text-white">
-          -
-        </Button>
-
-        {/* Row 3 */}
-        <Button variant="outline" onClick={() => inputNumber('4')} className="bg-os-shadow hover:bg-os-medium">
-          4
-        </Button>
-        <Button variant="outline" onClick={() => inputNumber('5')} className="bg-os-shadow hover:bg-os-medium">
-          5
-        </Button>
-        <Button variant="outline" onClick={() => inputNumber('6')} className="bg-os-shadow hover:bg-os-medium">
-          6
-        </Button>
-        <Button variant="outline" onClick={() => inputOperation('+')} className="bg-infinity-primary hover:bg-infinity-secondary text-white">
-          +
-        </Button>
-
-        {/* Row 4 */}
-        <Button variant="outline" onClick={() => inputNumber('1')} className="bg-os-shadow hover:bg-os-medium">
-          1
-        </Button>
-        <Button variant="outline" onClick={() => inputNumber('2')} className="bg-os-shadow hover:bg-os-medium">
-          2
-        </Button>
-        <Button variant="outline" onClick={() => inputNumber('3')} className="bg-os-shadow hover:bg-os-medium">
-          3
-        </Button>
-        <Button variant="outline" onClick={performCalculation} className="row-span-2 bg-infinity-secondary hover:bg-infinity-primary text-white">
-          =
-        </Button>
-
-        {/* Row 5 */}
-        <Button variant="outline" onClick={() => inputNumber('0')} className="col-span-2 bg-os-shadow hover:bg-os-medium">
-          0
-        </Button>
-        <Button variant="outline" onClick={inputDecimal} className="bg-os-shadow hover:bg-os-medium">
-          .
-        </Button>
-      </div>
     </div>
   );
 };
