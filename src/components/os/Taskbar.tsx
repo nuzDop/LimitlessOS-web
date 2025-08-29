@@ -1,65 +1,62 @@
 import React from 'react';
+import { Button } from '@/components/ui/button';
 import { Window } from './Desktop';
+import { SystemTray } from './SystemTray';
 
 interface TaskbarProps {
   windows: Window[];
   onWindowSelect: (id: string) => void;
   onLauncherToggle: () => void;
+  onActivitiesToggle: () => void;
+  showActivities: boolean;
 }
 
-export const Taskbar: React.FC<TaskbarProps> = ({
-  windows,
-  onWindowSelect,
-  onLauncherToggle
+export const Taskbar: React.FC<TaskbarProps> = ({ 
+  windows, 
+  onWindowSelect, 
+  onLauncherToggle,
+  onActivitiesToggle,
+  showActivities
 }) => {
   return (
-    <div className="fixed bottom-0 left-0 right-0 h-12 os-window border-t border-os-medium z-50">
-      <div className="flex items-center h-full px-4">
-        {/* Security Shield / App Launcher */}
-        <button
-          onClick={onLauncherToggle}
-          className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-r from-military-primary to-military-secondary os-button hover:shadow-[0_0_20px_hsl(var(--military-accent)/0.5)] transition-all duration-300"
-        >
-          <svg viewBox="0 0 100 100" className="w-5 h-5">
-            <path
-              d="M50 10 L80 30 L80 70 C80 85 65 90 50 90 C35 90 20 85 20 70 L20 30 Z"
-              fill="white"
-              strokeLinecap="round"
-            />
-          </svg>
-        </button>
+    <div className="fixed bottom-0 left-0 right-0 h-12 bg-os-dark/80 backdrop-blur-md border-t border-os-medium/50 flex items-center px-4 z-30">
+      {/* Activities Button */}
+      <Button
+        variant={showActivities ? "default" : "ghost"}
+        size="sm"
+        onClick={onActivitiesToggle}
+        className="mr-4 font-semibold"
+      >
+        Activities
+      </Button>
 
-        {/* Window List */}
-        <div className="flex items-center ml-4 space-x-2">
-          {windows.filter(w => !w.minimized).map(window => (
-            <button
-              key={window.id}
-              onClick={() => onWindowSelect(window.id)}
-              className="px-3 py-1 text-sm bg-os-medium hover:bg-os-light/20 rounded transition-all duration-200 text-os-bright border border-os-medium/50"
-            >
-              {window.title}
-            </button>
-          ))}
-        </div>
+      {/* App Launcher */}
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={onLauncherToggle}
+        className="mr-4"
+      >
+        <span className="text-lg">🚀</span>
+      </Button>
 
-        {/* System Tray */}
-        <div className="ml-auto flex items-center space-x-4">
-          {/* System Status */}
-          <div className="flex items-center space-x-2 text-xs text-os-light">
-            <div className="w-2 h-2 rounded-full bg-military-secondary animate-pulse" />
-            <span>Secure</span>
-          </div>
-          
-          {/* Clock */}
-          <div className="text-sm text-os-bright font-mono">
-            {new Date().toLocaleTimeString([], { 
-              hour: '2-digit', 
-              minute: '2-digit',
-              hour12: false 
-            })}
-          </div>
-        </div>
+      {/* Window Tabs */}
+      <div className="flex-1 flex items-center space-x-2 overflow-x-auto">
+        {windows.filter(w => !w.minimized).map(window => (
+          <Button
+            key={window.id}
+            variant="ghost"
+            size="sm"
+            onClick={() => onWindowSelect(window.id)}
+            className="flex items-center space-x-2 max-w-48 truncate"
+          >
+            <span className="truncate">{window.title}</span>
+          </Button>
+        ))}
       </div>
+
+      {/* System Tray */}
+      <SystemTray />
     </div>
   );
 };
