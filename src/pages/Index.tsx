@@ -1,8 +1,8 @@
 import React from 'react';
-import { SecureOS } from '@/components/os/SecureOS';
+import { LimitlessOS } from "@/components/os/LimitlessOS";
 
 const Index = () => {
-  return <SecureOS />;
+  return <LimitlessOS />;
 };
 
 export default Index;

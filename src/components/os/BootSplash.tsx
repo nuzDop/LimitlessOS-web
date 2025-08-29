@@ -4,57 +4,26 @@ interface BootSplashProps {
   onBootComplete: () => void;
 }
 
-const SecureShield = ({ className = "" }: { className?: string }) => (
+const InfinitySymbol = ({ className = "" }: { className?: string }) => (
   <svg
     className={className}
-    viewBox="0 0 200 200"
+    viewBox="0 0 200 100"
     xmlns="http://www.w3.org/2000/svg"
   >
-    {/* Shield outline */}
     <path
-      d="M100 20 L160 50 L160 120 C160 150 130 180 100 180 C70 180 40 150 40 120 L40 50 Z"
+      d="M50,50 C30,30 10,30 10,50 C10,70 30,70 50,50 C70,30 130,30 150,50 C170,70 190,70 190,50 C190,30 170,30 150,50 C130,70 70,70 50,50 Z"
       fill="none"
-      stroke="url(#shieldGradient)"
+      stroke="url(#infinityGradient)"
       strokeWidth="4"
       strokeLinecap="round"
-    />
-    
-    {/* Inner security elements */}
-    <circle
-      cx="100"
-      cy="90"
-      r="25"
-      fill="none"
-      stroke="url(#shieldGradient)"
-      strokeWidth="2"
-      opacity="0.7"
-    />
-    
-    {/* Lock symbol */}
-    <rect
-      x="90"
-      y="100"
-      width="20"
-      height="15"
-      rx="2"
-      fill="url(#shieldGradient)"
-      opacity="0.8"
-    />
-    
-    <circle
-      cx="100"
-      cy="85"
-      r="8"
-      fill="none"
-      stroke="url(#shieldGradient)"
-      strokeWidth="3"
+      strokeLinejoin="round"
     />
     
     <defs>
-      <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="hsl(var(--military-primary))" />
-        <stop offset="50%" stopColor="hsl(var(--military-accent))" />
-        <stop offset="100%" stopColor="hsl(var(--military-secondary))" />
+      <linearGradient id="infinityGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stopColor="hsl(var(--infinity-primary))" />
+        <stop offset="50%" stopColor="hsl(var(--infinity-accent))" />
+        <stop offset="100%" stopColor="hsl(var(--infinity-secondary))" />
       </linearGradient>
     </defs>
   </svg>
@@ -62,15 +31,15 @@ const SecureShield = ({ className = "" }: { className?: string }) => (
 
 export const BootSplash: React.FC<BootSplashProps> = ({ onBootComplete }) => {
   const [progress, setProgress] = useState(0);
-  const [stage, setStage] = useState("Initializing SecureOS...");
+  const [stage, setStage] = useState("Initializing LimitlessOS...");
   
   const bootStages = [
-    "Initializing SecureOS...",
-    "Loading security modules...",
-    "Mounting encrypted file systems...",
-    "Starting enterprise services...",
-    "Preparing secure desktop environment...",
-    "System ready for operation."
+    "Initializing LimitlessOS...",
+    "Loading infinity kernel...",
+    "Mounting virtual file systems...",
+    "Starting system services...",
+    "Preparing desktop environment...",
+    "System ready for unlimited possibilities."
   ];
 
   useEffect(() => {
@@ -109,26 +78,26 @@ export const BootSplash: React.FC<BootSplashProps> = ({ onBootComplete }) => {
       
       {/* Boot Animation */}
       <div className="relative z-10 flex flex-col items-center space-y-8 animate-[bootFade_2s_ease-out]">
-        {/* Security Shield Logo */}
+        {/* Rotating Infinity Logo */}
         <div className="relative">
-          <SecureShield className="w-32 h-32 military-glow" />
-          <div className="absolute inset-0 w-32 h-32">
-            <SecureShield className="w-32 h-32 opacity-30 animate-[militaryRotate_8s_linear_infinite]" />
+          <InfinitySymbol className="w-40 h-20 infinity-glow" />
+          <div className="absolute inset-0 w-40 h-20">
+            <InfinitySymbol className="w-40 h-20 opacity-30 animate-[infinityRotate_4s_linear_infinite]" />
           </div>
         </div>
         
         {/* OS Name */}
         <div className="text-center">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-military-primary to-military-secondary bg-clip-text text-transparent">
-            SecureOS
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-infinity-primary via-infinity-accent to-infinity-secondary bg-clip-text text-transparent">
+            LimitlessOS
           </h1>
-          <p className="text-os-light text-lg mt-2">Military & Business Grade</p>
+          <p className="text-os-light text-lg mt-2">Infinite Possibilities</p>
         </div>
         
         {/* Progress Bar */}
-        <div className="w-80 bg-os-dark rounded-full h-2 overflow-hidden">
+        <div className="w-80 bg-os-dark rounded-full h-3 overflow-hidden">
           <div 
-            className="h-full bg-gradient-to-r from-military-primary to-military-secondary transition-all duration-300 ease-out"
+            className="h-full bg-gradient-to-r from-infinity-primary via-infinity-accent to-infinity-secondary transition-all duration-300 ease-out"
             style={{ width: `${Math.min(progress, 100)}%` }}
           />
         </div>
@@ -139,10 +108,10 @@ export const BootSplash: React.FC<BootSplashProps> = ({ onBootComplete }) => {
       
       {/* Particle Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+        {[...Array(30)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-1 h-1 bg-military-primary rounded-full opacity-60 animate-pulse"
+            className="absolute w-2 h-2 bg-infinity-glow rounded-full opacity-60 animate-pulse"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,

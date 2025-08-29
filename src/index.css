@@ -2,24 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-/* SecureOS Design System - Military & Business Grade Operating System */
+/* LimitlessOS Design System - Infinity-Themed Operating System */
 
 @layer base {
   :root {
-    /* OS Core Colors - Professional Dark Theme */
-    --os-void: 210 20% 8%;          /* Command center black */
-    --os-shadow: 210 15% 12%;       /* Tactical dark */
-    --os-dark: 210 12% 18%;         /* Console dark */
-    --os-medium: 210 8% 28%;        /* Interface gray */
-    --os-light: 210 6% 65%;         /* Data gray */
-    --os-bright: 210 4% 92%;        /* Terminal white */
+    /* OS Core Colors - Infinity Theme */
+    --os-void: 0 0% 0%;             /* Pure black */
+    --os-shadow: 0 0% 15%;          /* Dark gray */
+    --os-dark: 0 0% 25%;            /* Medium gray */
+    --os-medium: 0 0% 45%;          /* Light gray */
+    --os-light: 0 0% 75%;           /* Very light gray */
+    --os-bright: 0 0% 95%;          /* Near white */
     --os-pure: 0 0% 100%;           /* Pure white */
     
-    /* Military/Business Theme */
-    --military-primary: 210 100% 45%;       /* Command blue */
-    --military-secondary: 120 30% 40%;      /* Tactical green */
-    --military-accent: 45 95% 50%;          /* Alert amber */
-    --military-critical: 0 75% 55%;         /* Critical red */
+    /* Infinity Theme Colors */
+    --infinity-primary: 270 100% 65%;       /* Purple infinity */
+    --infinity-secondary: 210 100% 55%;     /* Blue infinity */
+    --infinity-accent: 300 100% 70%;        /* Magenta accent */
+    --infinity-glow: 240 100% 80%;          /* Light purple glow */
     
     /* System States */
     --success: 120 60% 50%;
@@ -33,12 +33,12 @@
     --blur-backdrop: blur(20px);
     
     /* Gradients */
-    --gradient-command: linear-gradient(135deg, hsl(var(--military-primary)), hsl(var(--military-secondary)));
-    --gradient-tactical: linear-gradient(180deg, hsl(var(--os-void)), hsl(var(--os-shadow)));
-    --gradient-hud: linear-gradient(145deg, hsl(var(--glass-bg)), transparent);
+    --gradient-infinity: linear-gradient(135deg, hsl(var(--infinity-primary)), hsl(var(--infinity-secondary)));
+    --gradient-background: linear-gradient(180deg, hsl(var(--os-void)), hsl(var(--os-shadow)), hsl(var(--os-dark)));
+    --gradient-glass: linear-gradient(145deg, hsl(var(--glass-bg)), transparent);
     
     /* Shadows */
-    --shadow-command: 0 0 20px hsl(var(--military-primary) / 0.3);
+    --shadow-infinity: 0 0 30px hsl(var(--infinity-glow) / 0.4);
     --shadow-window: 0 20px 60px hsl(var(--os-void) / 0.8);
     --shadow-button: 0 4px 15px hsl(var(--os-void) / 0.4);
     
@@ -57,19 +57,19 @@
     --card-foreground: var(--os-bright);
     --popover: var(--os-medium);
     --popover-foreground: var(--os-pure);
-    --primary: var(--military-primary);
+    --primary: var(--infinity-primary);
     --primary-foreground: var(--os-pure);
     --secondary: var(--os-medium);
     --secondary-foreground: var(--os-bright);
     --muted: var(--os-medium);
     --muted-foreground: var(--os-light);
-    --accent: var(--military-secondary);
+    --accent: var(--infinity-secondary);
     --accent-foreground: var(--os-pure);
     --destructive: var(--error);
     --destructive-foreground: var(--os-pure);
     --border: var(--os-medium);
     --input: var(--os-dark);
-    --ring: var(--military-primary);
+    --ring: var(--infinity-primary);
     --radius: 0.75rem;
   }
 }
@@ -86,7 +86,7 @@
 
   body {
     @apply bg-os-void text-os-pure;
-    background: var(--gradient-tactical);
+    background: var(--gradient-background);
   }
   
   /* OS-specific styles */
@@ -106,16 +106,16 @@
     box-shadow: var(--shadow-button);
   }
   
-  .military-glow {
-    animation: militaryPulse 3s ease-in-out infinite;
+  .infinity-glow {
+    animation: infinityPulse 3s ease-in-out infinite;
   }
   
-  @keyframes militaryPulse {
+  @keyframes infinityPulse {
     0%, 100% { opacity: 0.7; transform: scale(1); }
     50% { opacity: 1; transform: scale(1.02); }
   }
   
-  @keyframes militaryRotate {
+  @keyframes infinityRotate {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
   }
@@ -140,7 +140,7 @@
   }
   
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--military-primary));
+    background: hsl(var(--infinity-primary));
   }
 }
 

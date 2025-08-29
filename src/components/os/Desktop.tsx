@@ -5,6 +5,7 @@ import { AppLauncher } from './AppLauncher';
 import { Terminal } from './apps/Terminal';
 import { FileExplorer } from './apps/FileExplorer';
 import { Settings } from './apps/Settings';
+import { Firefox } from './apps/Firefox';
 
 export interface Window {
   id: string;
@@ -28,20 +29,26 @@ export interface App {
 
 const apps: App[] = [
   {
+    id: 'firefox',
+    name: 'Firefox Browser',
+    icon: '🦊',
+    component: Firefox
+  },
+  {
     id: 'terminal',
-    name: 'Command Terminal',
+    name: 'Terminal',
     icon: '⚡',
     component: Terminal
   },
   {
     id: 'navigator',
-    name: 'File Navigator',
+    name: 'File Explorer',
     icon: '📁',
     component: FileExplorer
   },
   {
     id: 'settings',
-    name: 'System Control',
+    name: 'Settings',
     icon: '⚙️',
     component: Settings
   }
@@ -113,44 +120,44 @@ export const Desktop: React.FC = () => {
     <div className="h-screen bg-gradient-to-br from-os-void via-os-shadow to-os-dark relative overflow-hidden">
       {/* Desktop Background */}
       <div className="absolute inset-0">
-        {/* Military grid pattern background */}
+        {/* Infinity symbol pattern background */}
         <div className="absolute inset-0 opacity-10">
           {[...Array(8)].map((_, i) => (
             <div
               key={i}
-              className="absolute border border-military-primary/20"
+              className="absolute opacity-20"
               style={{
-                left: `${10 + i * 12}%`,
-                top: `${10 + (i % 3) * 25}%`,
-                width: '120px',
-                height: '120px',
-                transform: `rotate(${i * 45}deg)`
-              }}
-            />
-          ))}
-          
-          {/* Security badge pattern */}
-          {[...Array(3)].map((_, i) => (
-            <div
-              key={`badge-${i}`}
-              className="absolute w-16 h-16 opacity-20"
-              style={{
-                right: `${20 + i * 30}%`,
-                top: `${30 + i * 20}%`,
+                left: `${15 + i * 12}%`,
+                top: `${15 + (i % 3) * 25}%`,
+                width: '100px',
+                height: '50px',
                 transform: `rotate(${i * 30}deg)`
               }}
             >
-              <svg viewBox="0 0 100 100" className="w-full h-full">
+              <svg viewBox="0 0 200 100" className="w-full h-full">
                 <path
-                  d="M50 10 L80 30 L80 70 C80 85 65 90 50 90 C35 90 20 85 20 70 L20 30 Z"
+                  d="M50,50 C30,30 10,30 10,50 C10,70 30,70 50,50 C70,30 130,30 150,50 C170,70 190,70 190,50 C190,30 170,30 150,50 C130,70 70,70 50,50 Z"
                   fill="none"
-                  stroke="hsl(var(--military-secondary))"
-                  strokeWidth="1"
-                  opacity="0.4"
+                  stroke="hsl(var(--infinity-primary))"
+                  strokeWidth="2"
+                  opacity="0.6"
                 />
               </svg>
             </div>
           ))}
+          
+          {/* Large central infinity symbol */}
+          <div className="absolute inset-0 flex items-center justify-center opacity-5">
+            <svg viewBox="0 0 400 200" className="w-96 h-48">
+              <path
+                d="M100,100 C60,60 20,60 20,100 C20,140 60,140 100,100 C140,60 260,60 300,100 C340,140 380,140 380,100 C380,60 340,60 300,100 C260,140 140,140 100,100 Z"
+                fill="none"
+                stroke="hsl(var(--infinity-secondary))"
+                strokeWidth="3"
+                opacity="0.8"
+              />
+            </svg>
+          </div>
         </div>
       </div>
 
