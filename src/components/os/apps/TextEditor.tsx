@@ -20,7 +20,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({ filePath }) => {
 
   const handleSave = () => {
     if (currentFile) {
-      vfs.delete(currentFile); // Overwrite existing file
+      vfs.delete(currentFile);
       vfs.create(currentFile, 'file', content);
       alert('File saved!');
     } else {

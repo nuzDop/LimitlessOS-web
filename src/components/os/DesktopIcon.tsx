@@ -12,7 +12,7 @@ export const DesktopIcon: React.FC<DesktopIconProps> = ({ app, onOpen }) => {
         className="flex flex-col items-center justify-center text-center w-24 h-24 cursor-pointer p-2 rounded-lg hover:bg-white/10"
         onDoubleClick={() => onOpen(app)}
     >
-      <div className="text-4xl">{app.icon}</div>
+      <img src={app.icon} alt={app.name} className="w-12 h-12" />
       <span className="text-white text-xs mt-2 truncate w-full">{app.name}</span>
     </div>
   );

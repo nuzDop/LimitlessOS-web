@@ -2,17 +2,23 @@ import React, { useState, useRef } from 'react';
 import { ArrowLeft, ArrowRight, RotateCw, Home, Lock } from 'lucide-react';
 
 export const Browser: React.FC = () => {
-  const [url, setUrl] = useState('https://www.google.com/webhp?igu=1');
+  const [currentUrl, setCurrentUrl] = useState('https://www.google.com');
   const [displayUrl, setDisplayUrl] = useState('https://www.google.com');
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  const handleGo = (e: React.FormEvent) => {
-    e.preventDefault();
-    let finalUrl = displayUrl;
+  const navigateTo = (url: string) => {
+    let finalUrl = url;
     if (!finalUrl.startsWith('http')) {
       finalUrl = `https://` + finalUrl;
     }
-    setUrl(finalUrl);
+    setDisplayUrl(finalUrl);
+    // Use the allOrigins proxy to bypass CORS/X-Frame-Options restrictions
+    setCurrentUrl(`https://api.allorigins.win/raw?url=${encodeURIComponent(finalUrl)}`);
+  };
+
+  const handleGo = (e: React.FormEvent) => {
+    e.preventDefault();
+    navigateTo(displayUrl);
   };
 
   const handleNav = (action: 'back' | 'forward' | 'reload' | 'home') => {
@@ -26,16 +32,16 @@ export const Browser: React.FC = () => {
           iframeRef.current.contentWindow?.history.forward();
           break;
         case 'reload':
-          iframeRef.current.src = iframeRef.current.src;
+          if (iframeRef.current.src) {
+            iframeRef.current.src = iframeRef.current.src;
+          }
           break;
         case 'home':
-          const homeUrl = 'https://www.google.com/webhp?igu=1';
-          setUrl(homeUrl);
-          setDisplayUrl('https://www.google.com');
+          navigateTo('https://www.google.com');
           break;
       }
     } catch (e) {
-        console.error("Browser navigation failed (cross-origin restrictions):", e);
+      console.error("Browser navigation failed (cross-origin restrictions):", e);
     }
   };
 
@@ -62,7 +68,7 @@ export const Browser: React.FC = () => {
       <div className="flex-1 bg-gray-400">
         <iframe
           ref={iframeRef}
-          src={url}
+          src={currentUrl}
           className="w-full h-full border-0"
           sandbox="allow-forms allow-modals allow-pointer-lock allow-popups allow-presentation allow-same-origin allow-scripts"
           title="Browser"

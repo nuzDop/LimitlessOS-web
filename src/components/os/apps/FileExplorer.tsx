@@ -1,189 +1,128 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { vfs } from '@/lib/vfs';
+import { App } from '../Desktop';
+
+import folderIcon from '@/assets/icons/folder.svg';
+import fileTextIcon from '@/assets/icons/file-text.svg';
+import fileImageIcon from '@/assets/icons/file-image.svg';
+import filePdfIcon from '@/assets/icons/file-pdf.svg';
+import fileGenericIcon from '@/assets/icons/file-generic.svg';
 
 interface FileItem {
   name: string;
   type: 'file' | 'folder';
-  size?: number;
-  modified: Date;
-  icon: string;
+  modified: string;
 }
 
-interface Folder {
-  name: string;
-  path: string;
-  items: FileItem[];
+// Define the props the File Explorer will accept
+interface FileExplorerProps {
+  openApp: (app: App, props: object) => void;
+  apps: App[];
 }
 
-const fileSystem: Record<string, Folder> = {
-  '/': {
-    name: 'Root',
-    path: '/',
-    items: [
-      { name: 'home', type: 'folder', modified: new Date(), icon: '🏠' },
-      { name: 'usr', type: 'folder', modified: new Date(), icon: '📁' },
-      { name: 'etc', type: 'folder', modified: new Date(), icon: '⚙️' },
-      { name: 'var', type: 'folder', modified: new Date(), icon: '📊' },
-      { name: 'tmp', type: 'folder', modified: new Date(), icon: '🗂️' }
-    ]
-  },
-  '/home': {
-    name: 'Home',
-    path: '/home',
-    items: [
-      { name: 'limitless-user', type: 'folder', modified: new Date(), icon: '👤' }
-    ]
-  },
-  '/home/limitless-user': {
-    name: 'User Home',
-    path: '/home/limitless-user',
-    items: [
-      { name: 'Documents', type: 'folder', modified: new Date(), icon: '📄' },
-      { name: 'Downloads', type: 'folder', modified: new Date(), icon: '📥' },
-      { name: 'Desktop', type: 'folder', modified: new Date(), icon: '🖥️' },
-      { name: 'Pictures', type: 'folder', modified: new Date(), icon: '🖼️' },
-      { name: 'Videos', type: 'folder', modified: new Date(), icon: '🎬' },
-      { name: '.config', type: 'folder', modified: new Date(), icon: '⚙️' },
-      { name: 'README.txt', type: 'file', size: 1024, modified: new Date(), icon: '📝' }
-    ]
-  },
-  '/home/limitless-user/Documents': {
-    name: 'Documents',
-    path: '/home/limitless-user/Documents',
-    items: [
-      { name: 'LimitlessOS_Manual.pdf', type: 'file', size: 2048576, modified: new Date(), icon: '📕' },
-      { name: 'Notes.txt', type: 'file', size: 512, modified: new Date(), icon: '📝' },
-      { name: 'Projects', type: 'folder', modified: new Date(), icon: '💼' }
-    ]
-  }
+const getIconForFile = (fileName: string) => {
+    const extension = fileName.split('.').pop()?.toLowerCase();
+    switch (extension) {
+        case 'txt':
+        case 'md':
+            return fileTextIcon;
+        case 'png':
+        case 'jpg':
+        case 'jpeg':
+        case 'svg':
+            return fileImageIcon;
+        case 'pdf':
+            return filePdfIcon;
+        default:
+            return fileGenericIcon;
+    }
 };
 
-export const FileExplorer: React.FC = () => {
+export const FileExplorer: React.FC<FileExplorerProps> = ({ openApp, apps }) => {
   const [currentPath, setCurrentPath] = useState('/home/limitless-user');
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const [items, setItems] = useState<FileItem[]>([]);
   
-  const currentFolder = fileSystem[currentPath];
-  const pathSegments = currentPath.split('/').filter(Boolean);
-
-  const navigateToParent = () => {
-    if (currentPath === '/') return;
-    const parentPath = '/' + pathSegments.slice(0, -1).join('/');
-    setCurrentPath(parentPath === '/' ? '/' : parentPath);
-    setSelectedItem(null);
-  };
-
-  const navigateToFolder = (folderName: string) => {
-    const newPath = currentPath === '/' ? `/${folderName}` : `${currentPath}/${folderName}`;
-    if (fileSystem[newPath]) {
-      setCurrentPath(newPath);
-      setSelectedItem(null);
+  const loadItems = () => {
+    const dirContents = vfs.readDir(currentPath);
+    if (dirContents) {
+      const mappedItems = Object.entries(dirContents).map(([name, data]) => ({
+        name,
+        type: data.type,
+        modified: data.modified,
+      }));
+      setItems(mappedItems);
+    } else {
+      setItems([]);
     }
   };
 
-  const formatFileSize = (bytes: number): string => {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-    if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-    return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
+  useEffect(() => {
+    loadItems();
+  }, [currentPath]);
+
+  const navigateTo = (folderName: string) => {
+    const newPath = currentPath === '/' ? `/${folderName}` : `${currentPath}/${folderName}`;
+    if (vfs.readDir(newPath)) {
+        setCurrentPath(newPath);
+    }
   };
 
-  const formatDate = (date: Date): string => {
-    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    });
+  const navigateUp = () => {
+    if (currentPath === '/') return;
+    const parentPath = currentPath.substring(0, currentPath.lastIndexOf('/')) || '/';
+    setCurrentPath(parentPath);
+  };
+  
+  const formatDate = (dateString: string): string => {
+    return new Date(dateString).toLocaleString();
+  };
+
+  const handleDoubleClick = (item: FileItem) => {
+    if (item.type === 'folder') {
+      navigateTo(item.name);
+    } else if (item.name.endsWith('.txt')) {
+      // Find the text editor app and open it with the file path
+      const editorApp = apps.find(a => a.id === 'editor');
+      if (editorApp) {
+        const fullPath = currentPath === '/' ? `/${item.name}` : `${currentPath}/${item.name}`;
+        openApp(editorApp, { filePath: fullPath });
+      }
+    }
   };
 
   return (
     <div className="h-full bg-os-dark text-os-bright flex flex-col">
-      {/* Header */}
-      <div className="bg-os-medium border-b border-os-light/20 p-4">
-        <div className="flex items-center space-x-2 mb-2">
-          <button
-            onClick={navigateToParent}
-            disabled={currentPath === '/'}
-            className="px-3 py-1 bg-os-dark hover:bg-os-light/20 rounded text-sm border border-os-light/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            ← Back
-          </button>
-          <span className="text-infinity-primary">📁</span>
-          <span className="font-medium">Navigator</span>
-        </div>
-        
-        {/* Breadcrumb */}
-        <div className="flex items-center space-x-1 text-sm text-os-light">
-          <button 
-            onClick={() => setCurrentPath('/')}
-            className="hover:text-os-bright transition-colors"
-          >
-            Root
-          </button>
-          {pathSegments.map((segment, index) => (
-            <React.Fragment key={index}>
-              <span>/</span>
-              <button
-                onClick={() => setCurrentPath('/' + pathSegments.slice(0, index + 1).join('/'))}
-                className="hover:text-os-bright transition-colors"
-              >
-                {segment}
-              </button>
-            </React.Fragment>
+      <div className="bg-os-medium border-b border-os-light/20 p-2 flex items-center space-x-2">
+        <button onClick={navigateUp} disabled={currentPath === '/'} className="px-3 py-1 bg-os-dark hover:bg-os-light/20 rounded disabled:opacity-50">
+          ↑ Up
+        </button>
+        <div className="text-sm text-os-light bg-os-dark px-3 py-1 rounded w-full font-mono">{currentPath}</div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto p-2">
+        <div className="grid grid-cols-1 gap-1">
+          {items.length === 0 && (
+            <div className="text-center text-os-light p-8">This folder is empty.</div>
+          )}
+          {items.map((item) => (
+            <div
+              key={item.name}
+              onDoubleClick={() => handleDoubleClick(item)}
+              className="flex items-center space-x-3 p-2 rounded cursor-pointer hover:bg-os-medium/50"
+              title={item.name}
+            >
+              <img 
+                src={item.type === 'folder' ? folderIcon : getIconForFile(item.name)} 
+                alt={item.type} 
+                className="w-6 h-6"
+              />
+              <div className="flex-1 min-w-0">
+                <div className="font-medium text-os-bright truncate">{item.name}</div>
+              </div>
+              <div className="text-xs text-os-light font-mono">{formatDate(item.modified)}</div>
+            </div>
           ))}
         </div>
-      </div>
-
-      {/* File List */}
-      <div className="flex-1 overflow-y-auto">
-        {currentFolder ? (
-          <div className="p-4 space-y-1">
-            {currentFolder.items.map((item, index) => (
-              <div
-                key={index}
-                onClick={() => {
-                  setSelectedItem(item.name);
-                  if (item.type === 'folder') {
-                    navigateToFolder(item.name);
-                  }
-                }}
-                className={`
-                  flex items-center space-x-3 p-2 rounded cursor-pointer transition-colors
-                  ${selectedItem === item.name ? 'bg-infinity-primary/20 border border-infinity-primary/50' : 'hover:bg-os-medium/50'}
-                `}
-              >
-                <span className="text-xl">{item.icon}</span>
-                <div className="flex-1 min-w-0">
-                  <div className="font-medium text-os-bright truncate">
-                    {item.name}
-                  </div>
-                  <div className="text-xs text-os-light">
-                    {item.type === 'file' && item.size && formatFileSize(item.size)} · {formatDate(item.modified)}
-                  </div>
-                </div>
-                {item.type === 'folder' && (
-                  <span className="text-os-light text-sm">→</span>
-                )}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="flex items-center justify-center h-full text-os-light">
-            <div className="text-center">
-              <div className="text-4xl mb-2">❌</div>
-              <div>Folder not found</div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Status Bar */}
-      <div className="bg-os-medium border-t border-os-light/20 px-4 py-2 text-xs text-os-light">
-        {currentFolder ? (
-          <div className="flex justify-between">
-            <span>{currentFolder.items.length} items</span>
-            <span>{currentFolder.path}</span>
-          </div>
-        ) : (
-          <span>Ready</span>
-        )}
       </div>
     </div>
   );

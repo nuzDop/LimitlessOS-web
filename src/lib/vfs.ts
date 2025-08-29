@@ -54,28 +54,29 @@ const saveFileSystem = (vfs: { [key: string]: VFSObject }) => {
   }
 };
 
-const getObjectFromPath = (path: string): { parent: VFSObject | null, obj: VFSObject | null, key: string } => {
-    const fs = getFileSystem();
+const getObjectFromPath = (path: string, fs: { [key: string]: VFSObject }): { parent: VFSObject | null, obj: VFSObject | null, key: string } => {
     const segments = path.split('/').filter(Boolean);
     let current: VFSObject = fs['/'];
     let parent: VFSObject | null = null;
+    let key = '/';
 
-    for (let i = 0; i < segments.length; i++) {
-        const segment = segments[i];
+    for (const segment of segments) {
         if (current && current.type === 'folder' && current.children && current.children[segment]) {
             parent = current;
             current = current.children[segment];
+            key = segment;
         } else {
             return { parent: null, obj: null, key: '' };
         }
     }
-    return { parent, obj: current, key: segments[segments.length - 1] || '/' };
+    return { parent, obj: current, key };
 };
 
 
 export const vfs = {
   readDir: (path: string) => {
-    const { obj } = getObjectFromPath(path);
+    const fs = getFileSystem();
+    const { obj } = getObjectFromPath(path, fs);
     if (obj && obj.type === 'folder') {
       return obj.children || {};
     }
@@ -83,7 +84,8 @@ export const vfs = {
   },
 
   readFile: (path: string) => {
-    const { obj } = getObjectFromPath(path);
+    const fs = getFileSystem();
+    const { obj } = getObjectFromPath(path, fs);
     if (obj && obj.type === 'file') {
       return obj.content || '';
     }
@@ -96,7 +98,7 @@ export const vfs = {
     const parentPath = lastSlash === 0 ? '/' : path.substring(0, lastSlash) || '/';
     const name = path.substring(lastSlash + 1);
 
-    const { obj: parent } = getObjectFromPath(parentPath);
+    const { obj: parent } = getObjectFromPath(parentPath, fs);
 
     if (parent && parent.type === 'folder' && parent.children) {
         if (parent.children[name]) {
@@ -110,15 +112,37 @@ export const vfs = {
     }
     return false;
   },
-
+  
   delete: (path: string) => {
     const fs = getFileSystem();
-    const { parent, key } = getObjectFromPath(path);
+    const { parent, key } = getObjectFromPath(path, fs);
     if (parent && parent.children && key && parent.children[key]) {
         delete parent.children[key];
         saveFileSystem(fs);
         return true;
     }
     return false;
-  }
+  },
+
+  move: (sourcePath: string, destPath: string) => {
+    const fs = getFileSystem();
+    const { parent: sourceParent, obj: sourceObj, key: sourceKey } = getObjectFromPath(sourcePath, fs);
+    if (!sourceParent || !sourceObj || !sourceKey) return false;
+
+    // Simple rename if dest is in the same folder
+    const lastSlash = destPath.lastIndexOf('/');
+    const destParentPath = lastSlash === 0 ? '/' : destPath.substring(0, lastSlash) || '/';
+    const destName = destPath.substring(lastSlash + 1);
+
+    const { obj: destParent } = getObjectFromPath(destParentPath, fs);
+    if (destParent && destParent.type === 'folder' && destParent.children) {
+        if (destParent.children[destName]) return false; // Destination exists
+        
+        delete sourceParent.children![sourceKey];
+        destParent.children[destName] = sourceObj;
+        saveFileSystem(fs);
+        return true;
+    }
+    return false;
+  },
 };

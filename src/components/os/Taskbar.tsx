@@ -1,18 +1,20 @@
 import React from 'react';
 import { Window } from './Desktop';
-import { LayoutGrid } from 'lucide-react';
+import { LayoutGrid, AppWindow } from 'lucide-react';
 import { SystemTray } from './SystemTray';
 
 interface TaskbarProps {
   windows: Window[];
   onWindowSelect: (id: string) => void;
   onLauncherToggle: () => void;
+  onActivitiesToggle: () => void;
 }
 
 export const Taskbar: React.FC<TaskbarProps> = ({
   windows,
   onWindowSelect,
-  onLauncherToggle
+  onLauncherToggle,
+  onActivitiesToggle
 }) => {
   return (
     <div className="fixed bottom-0 left-0 right-0 h-12 os-window z-50">
@@ -22,6 +24,13 @@ export const Taskbar: React.FC<TaskbarProps> = ({
           className="flex items-center justify-center w-8 h-8 rounded-lg bg-os-medium/50 hover:bg-os-medium os-button transition-all duration-300"
         >
           <LayoutGrid className="w-5 h-5 text-os-light" />
+        </button>
+
+        <button
+          onClick={onActivitiesToggle}
+          className="flex items-center justify-center w-8 h-8 rounded-lg bg-os-medium/50 hover:bg-os-medium os-button transition-all duration-300 ml-2"
+        >
+          <AppWindow className="w-5 h-5 text-os-light" />
         </button>
 
         <div className="flex items-center ml-4 space-x-2">
